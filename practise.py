@@ -102,6 +102,7 @@ if __name__ == "__main__":
 
      except sr.RequestError:
             speak("Internet error")
+            speak('hello')
 
 
 

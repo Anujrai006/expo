@@ -24,12 +24,12 @@ if __name__ == "__main__":
     name = ""
 
     # openai client (keep OUTSIDE the loop)
-    client = OpenAI(api_key="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")
+    client = OpenAI(api_key="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")
     with sr.Microphone() as source:
-        r.adjust_for_ambient_noise(source)
-        print("speak jarvis to activate it")
-        audio=r.listen(source,timeout=5,phrase_time_limit=3)
-        com=r.recognize_google(audio)
+      r.adjust_for_ambient_noise(source)
+      print("speak jarvis to activate it")
+      audio=r.listen(source,timeout=5,phrase_time_limit=3)
+      com=r.recognize_google(audio)
     try:
      if "jarvis" in com.lower():
         print(com)
@@ -41,12 +41,14 @@ if __name__ == "__main__":
      print('sorry')
     while True: 
 
-     with sr.Microphone() as source:
+     
+
+     try:
+         with sr.Microphone() as source:
             r.adjust_for_ambient_noise(source)
             print("listening...")
             audio = r.listen(source, timeout=3, phrase_time_limit=5)
-
-     try:
+            
             word = r.recognize_google(audio)
             print("You said:", word)
 
@@ -55,6 +57,7 @@ if __name__ == "__main__":
             # exit
             if text in ["exit", "quit", "bye"]:
                 speak("goodbye")
+                break
                 # break
             
 
@@ -87,14 +90,14 @@ if __name__ == "__main__":
                 response = client.chat.completions.create(
                     model="gpt-4o-mini",
                     messages=[
-                        {"role": "system", "content": "You are aa personal assistant named jarvis like a alexa and gemini you are also like a humanoid robot so anser the question in short 1-2 sentences or lines only , and at last for every respond say if there any specific topic"
-                        " then i am always here to help you {name}."},
+                        {"role": "system", "content": "You are aa personal assistant named jarvis like a alexa and gemini you are also like a humanoid robot so anser the question in short 1-2 sentences or lines only , store the data you recently said when the user asked the questions based on the recently anser you can reply smoothly sometimes like a mcq wise questions give the very versy short ansers only no need of explaination , and  sometimes according to situation at last for every respond say if there any specific topic"
+                        " then i am always here to help you."},
                         {"role": "user", "content": word}
                     ]
                 )
 
                 answer = response.choices[0].message.content
-                print("AI:", answer)
+                # print("AI:", answer)
                 speak(answer)
 
      except sr.UnknownValueError:

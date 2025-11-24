@@ -4,10 +4,6 @@ import pyttsx3
 r=sr.Recognizer()
 from openai import OpenAI
 
-import speech_recognition as sr
-import time
-import pyttsx3
-from openai import OpenAI
 
 r = sr.Recognizer()
 

@@ -1,15 +1,33 @@
-import speech_recognition as sr
-import time
 import pyttsx3
-r=sr.Recognizer()
+import time
+import speech_recognition as sr
 from openai import OpenAI
+import pygame
+pygame.mixer.init()
 
-import speech_recognition as sr
-import time
-import pyttsx3
-from openai import OpenAI
 
 r = sr.Recognizer()
+def play_song(path):
+    try:
+        # ensure the mixer is initialized
+        if not pygame.mixer.get_init():
+            try:
+                pygame.mixer.init()
+            except Exception as e:
+                print(f"mixer init error: {e}")
+
+        pygame.mixer.music.load(path)
+        pygame.mixer.music.play()
+        return True
+    except Exception as e:
+        # print the error so the user can inspect logs in the terminal
+        print(f"play_song error: {e}")
+        # best-effort voice feedback; avoid raising if TTS also fails
+        try:
+            speak("Sorry, the song could not be played")
+        except Exception:
+            pass
+        return False
 
 def speak(command):
     engine = pyttsx3.init()
@@ -24,7 +42,7 @@ if __name__ == "__main__":
     name = ""
 
     # openai client (keep OUTSIDE the loop)
-    client = OpenAI(api_key="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")
+    client = OpenAI(api_key="")
     with sr.Microphone() as source:
       r.adjust_for_ambient_noise(source)
       print("speak jarvis to activate it")
@@ -68,6 +86,17 @@ if __name__ == "__main__":
             # designer?
             elif "who designed you" in text:
                 speak("I was designed by the group of class 11 students")
+            elif "emotional" in text:
+              speak("Playing an emotional song")
+              play_song("C:/Users/Anuj Rai/python/expowork/expo/emotional.mp3")
+
+
+
+
+
+
+
+
 
             # age?
             elif "your age" in text:
@@ -97,7 +126,6 @@ if __name__ == "__main__":
                 )
 
                 answer = response.choices[0].message.content
-                # print("AI:", answer)
                 speak(answer)
 
      except sr.UnknownValueError:
@@ -106,6 +134,7 @@ if __name__ == "__main__":
      except sr.RequestError:
             speak("Internet error")
             speak('hello')
+            
 
 
 

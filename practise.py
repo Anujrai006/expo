@@ -1,11 +1,33 @@
-import speech_recognition as sr
-import time
 import pyttsx3
-r=sr.Recognizer()
+import time
+import speech_recognition as sr
 from openai import OpenAI
+import pygame
+pygame.mixer.init()
 
 
 r = sr.Recognizer()
+def play_song(path):
+    try:
+        # ensure the mixer is initialized
+        if not pygame.mixer.get_init():
+            try:
+                pygame.mixer.init()
+            except Exception as e:
+                print(f"mixer init error: {e}")
+
+        pygame.mixer.music.load(path)
+        pygame.mixer.music.play()
+        return True
+    except Exception as e:
+        # print the error so the user can inspect logs in the terminal
+        print(f"play_song error: {e}")
+        # best-effort voice feedback; avoid raising if TTS also fails
+        try:
+            speak("Sorry, the song could not be played")
+        except Exception:
+            pass
+        return False
 
 def speak(command):
     engine = pyttsx3.init()
@@ -20,12 +42,12 @@ if __name__ == "__main__":
     name = ""
 
     # openai client (keep OUTSIDE the loop)
-    client = OpenAI(api_key="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")
+    client = OpenAI(api_key="")
     with sr.Microphone() as source:
-        r.adjust_for_ambient_noise(source)
-        print("speak jarvis to activate it")
-        audio=r.listen(source,timeout=5,phrase_time_limit=3)
-        com=r.recognize_google(audio)
+      r.adjust_for_ambient_noise(source)
+      print("speak jarvis to activate it")
+      audio=r.listen(source,timeout=5,phrase_time_limit=3)
+      com=r.recognize_google(audio)
     try:
      if "jarvis" in com.lower():
         print(com)
@@ -37,12 +59,14 @@ if __name__ == "__main__":
      print('sorry')
     while True: 
 
-     with sr.Microphone() as source:
+     
+
+     try:
+         with sr.Microphone() as source:
             r.adjust_for_ambient_noise(source)
             print("listening...")
             audio = r.listen(source, timeout=3, phrase_time_limit=5)
-
-     try:
+            
             word = r.recognize_google(audio)
             print("You said:", word)
 
@@ -51,6 +75,7 @@ if __name__ == "__main__":
             # exit
             if text in ["exit", "quit", "bye"]:
                 speak("goodbye")
+                break
                 # break
             
 
@@ -61,6 +86,17 @@ if __name__ == "__main__":
             # designer?
             elif "who designed you" in text:
                 speak("I was designed by the group of class 11 students")
+            elif "emotional" in text:
+              speak("Playing an emotional song")
+              play_song("C:/Users/Anuj Rai/python/expowork/expo/emotional.mp3")
+
+
+
+
+
+
+
+
 
             # age?
             elif "your age" in text:
@@ -83,14 +119,13 @@ if __name__ == "__main__":
                 response = client.chat.completions.create(
                     model="gpt-4o-mini",
                     messages=[
-                        {"role": "system", "content": "You are aa personal assistant named jarvis like a alexa and gemini you are also like a humanoid robot so anser the question in short 1-2 sentences or lines only , and at last for every respond say if there any specific topic"
-                        " then i am always here to help you {name}."},
+                        {"role": "system", "content": "You are aa personal assistant named jarvis like a alexa and gemini you are also like a humanoid robot so anser the question in short 1-2 sentences or lines only , store the data you recently said when the user asked the questions based on the recently anser you can reply smoothly sometimes like a mcq wise questions give the very versy short ansers only no need of explaination , and  sometimes according to situation at last for every respond say if there any specific topic"
+                        " then i am always here to help you."},
                         {"role": "user", "content": word}
                     ]
                 )
 
                 answer = response.choices[0].message.content
-                print("AI:", answer)
                 speak(answer)
 
      except sr.UnknownValueError:
@@ -98,6 +133,8 @@ if __name__ == "__main__":
 
      except sr.RequestError:
             speak("Internet error")
+            speak('hello')
+            
 
 
 

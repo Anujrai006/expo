@@ -42,7 +42,7 @@ if __name__ == "__main__":
     name = ""
 
     # openai client (keep OUTSIDE the loop)
-    client = OpenAI(api_key="")
+    client = OpenAI(api_key="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")
     with sr.Microphone() as source:
       r.adjust_for_ambient_noise(source)
       print("speak jarvis to activate it")

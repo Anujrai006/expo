@@ -3,31 +3,43 @@ import time
 import speech_recognition as sr
 from openai import OpenAI
 import pygame
-pygame.mixer.init()
+import webbrowser
+# pygame.mixer.init()
+# from pydub import AudioSegment
 
+# song = AudioSegment.from_mp3("C:/Users/Anuj Rai/python/expowork/expo/emotional.mp3")
+# song.export("C:/Users/Anuj Rai/python/expowork/expo/emotional.wav", format="wav")
+# def play_song(path):
+    # try:
+    #     # ensure mixer is initialized
+    #     if not pygame.mixer.get_init():
+    #         pygame.mixer.init()
 
+    #     pygame.mixer.music.load(path)
+    #     pygame.mixer.music.play()
+    #     return True
+    # except Exception as e:
+    #     print(f"play_song error: {e}")
+    #     try:
+    #         speak("Sorry, the song could not be played")
+    #     except Exception:
+    #         pass
+    #     return False
+
+# Song_library={
+#     "emotional": "C:/Users/Anuj Rai/python/expowork/expo/emotional.wav"
+# }
+
+# def play_song_by_keyword(keyword):
+#     path=Song_library.get(keyword)
+#     if path:
+#         speak(f"playing {keyword} song")
+#         return play_song(path)
+#     else:
+#         speak(f"sorry i don't have {keyword} song yet")
+#         return False
 r = sr.Recognizer()
-def play_song(path):
-    try:
-        # ensure the mixer is initialized
-        if not pygame.mixer.get_init():
-            try:
-                pygame.mixer.init()
-            except Exception as e:
-                print(f"mixer init error: {e}")
-
-        pygame.mixer.music.load(path)
-        pygame.mixer.music.play()
-        return True
-    except Exception as e:
-        # print the error so the user can inspect logs in the terminal
-        print(f"play_song error: {e}")
-        # best-effort voice feedback; avoid raising if TTS also fails
-        try:
-            speak("Sorry, the song could not be played")
-        except Exception:
-            pass
-        return False
+   
 
 def speak(command):
     engine = pyttsx3.init()
@@ -86,19 +98,13 @@ if __name__ == "__main__":
             # designer?
             elif "who designed you" in text:
                 speak("I was designed by the group of class 11 students")
-            elif "emotional" in text:
-              speak("Playing an emotional song")
-              play_song("C:/Users/Anuj Rai/python/expowork/expo/emotional.mp3")
+            # elif "emotional" in text:
+            #   speak("Playing an emotional song")
+            #   play_song("C:/Users/Anuj Rai/python/expowork/expo/emotional.mp3")
+            elif "open google" in text.lower():
+                webbrowser.open("www.google.com")
+                # age?
 
-
-
-
-
-
-
-
-
-            # age?
             elif "your age" in text:
                 speak("I don't have a specific age. Just wish me happy birthday anytime!")
 
@@ -115,6 +121,11 @@ if __name__ == "__main__":
                     speak("You have not told me your name yet")
 
             # ask GPT
+            # elif any(key in text for key in Song_library.keys()):
+            #     for key in Song_library.keys():
+            #         if key in text:
+            #             play_song_by_keyword(key)
+            #             break
             else:
                 response = client.chat.completions.create(
                     model="gpt-4o-mini",

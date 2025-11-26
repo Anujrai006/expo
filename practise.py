@@ -54,11 +54,11 @@ if __name__ == "__main__":
     name = ""
 
     # openai client (keep OUTSIDE the loop)
-    client=OpenAI(api_key="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")
+    client=OpenAI(api_key="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")
     with sr.Microphone() as source:
       r.adjust_for_ambient_noise(source)
       print("speak jarvis to activate it")
-      audio=r.listen(source,timeout=5,phrase_time_limit=3)
+      audio=r.listen(source,timeout=5,phrase_time_limit=4)
       com=r.recognize_google(audio)
     try:
      if "jarvis" in com.lower():
@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
             # your name?
             elif "your name" in text:
-                speak("My name is Jarvis, and what's your name?")
+                speak("My name is herbie, and what's your name?")
 
             # designer?
             elif "who designed you" in text:
@@ -138,6 +138,7 @@ if __name__ == "__main__":
 
                 answer = response.choices[0].message.content
                 speak(answer)
+                print(answer)
 
      except sr.UnknownValueError:
             speak("Sorry, I could not understand")

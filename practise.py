@@ -4,40 +4,8 @@ import speech_recognition as sr
 from openai import OpenAI
 import pygame
 import webbrowser
-# pygame.mixer.init()
-# from pydub import AudioSegment
-
-# song = AudioSegment.from_mp3("C:/Users/Anuj Rai/python/expowork/expo/emotional.mp3")
-# song.export("C:/Users/Anuj Rai/python/expowork/expo/emotional.wav", format="wav")
-# def play_song(path):
-    # try:
-    #     # ensure mixer is initialized
-    #     if not pygame.mixer.get_init():
-    #         pygame.mixer.init()
-
-    #     pygame.mixer.music.load(path)
-    #     pygame.mixer.music.play()
-    #     return True
-    # except Exception as e:
-    #     print(f"play_song error: {e}")
-    #     try:
-    #         speak("Sorry, the song could not be played")
-    #     except Exception:
-    #         pass
-    #     return False
-
-# Song_library={
-#     "emotional": "C:/Users/Anuj Rai/python/expowork/expo/emotional.wav"
-# }
-
-# def play_song_by_keyword(keyword):
-#     path=Song_library.get(keyword)
-#     if path:
-#         speak(f"playing {keyword} song")
-#         return play_song(path)
-#     else:
-#         speak(f"sorry i don't have {keyword} song yet")
-#         return False
+import datetime
+import requests
 r = sr.Recognizer()
    
 
@@ -54,7 +22,7 @@ if __name__ == "__main__":
     name = ""
 
     # openai client (keep OUTSIDE the loop)
-    client=OpenAI(api_key="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")
+    client=OpenAI(api_key="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")
     with sr.Microphone() as source:
       r.adjust_for_ambient_noise(source)
       print("speak jarvis to activate it")
@@ -77,7 +45,7 @@ if __name__ == "__main__":
          with sr.Microphone() as source:
             r.adjust_for_ambient_noise(source)
             print("listening...")
-            audio = r.listen(source, timeout=3, phrase_time_limit=5)
+            audio = r.listen(source, timeout=4, phrase_time_limit=7)
             
             word = r.recognize_google(audio)
             print("You said:", word)
@@ -98,9 +66,6 @@ if __name__ == "__main__":
             # designer?
             elif "who designed you" in text:
                 speak("I was designed by the group of class 11 students")
-            # elif "emotional" in text:
-            #   speak("Playing an emotional song")
-            #   play_song("C:/Users/Anuj Rai/python/expowork/expo/emotional.mp3")
             elif "open google" in text.lower():
                 webbrowser.open("www.google.com")
                 # age?
@@ -112,6 +77,33 @@ if __name__ == "__main__":
             elif "my name is" in text:
                 name = text.split()[-1]    # extract last word
                 speak(f"Nice to meet you, {name}")
+            elif "time" and "today" in text:
+                now = datetime.datetime.now().strftime("%I:%M %p")
+                speak(f"The time is {now}")
+
+            elif "date" in text:
+                 today = datetime.date.today().strftime("%B %d, %Y")
+                 speak(f"Today's date is {today}")
+            # elif "temperature" in text or "weather" in text:
+            elif "temperature" in text or "weather" in text:
+                try:
+                    api_key = "5ca60709900a47a3bf15d6fa8262dc98"
+
+                    city = "Itahari"
+        
+                    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
+
+                    response = requests.get(url)
+                    data = response.json()
+                    print(data)
+
+                    temp = data["main"]["temp"]
+                    speak(f"The current temperature in {city} is {temp} degree celsius")
+
+                except Exception as e:
+                     speak("Sorry, I cannot fetch the temperature right now.")
+                     print("Error:", e)
+
 
             # assistant remembering user name
             elif "do you know my name" in text:
@@ -119,27 +111,24 @@ if __name__ == "__main__":
                     speak(f"Yes, your name is {name}")
                 else:
                     speak("You have not told me your name yet")
-
-            # ask GPT
-            # elif any(key in text for key in Song_library.keys()):
-            #     for key in Song_library.keys():
-            #         if key in text:
-            #             play_song_by_keyword(key)
-            #             break
             else:
-                response = client.chat.completions.create(
+                try:
+                    response = client.chat.completions.create(
                     model="gpt-4o-mini",
                     messages=[
                         {"role": "system", "content": "You are aa personal assistant named jarvis like a alexa and gemini you are also like a humanoid robot so anser the question in short 1-2 sentences or lines only , store the data you recently said when the user asked the questions based on the recently anser you can reply smoothly sometimes like a mcq wise questions give the very versy short ansers only no need of explaination , and  sometimes according to situation at last for every respond say if there any specific topic"
                         " then i am always here to help you."},
                         {"role": "user", "content": word}
-                    ]
-                )
+                          ]
+                          )
 
-                answer = response.choices[0].message.content
-                speak(answer)
-                print(answer)
-
+                    answer = response.choices[0].message.content
+                    speak(answer)
+                    print(answer)
+                except UnboundLocalError as e:
+                    print(e)
+                    speak("sorry try again")
+ 
      except sr.UnknownValueError:
             speak("Sorry, I could not understand")
 

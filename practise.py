@@ -77,32 +77,42 @@ if __name__ == "__main__":
             elif "my name is" in text:
                 name = text.split()[-1]    # extract last word
                 speak(f"Nice to meet you, {name}")
-            elif "time" and "today" in text:
+            elif "time" and "now"  in text:
                 now = datetime.datetime.now().strftime("%I:%M %p")
                 speak(f"The time is {now}")
 
-            elif "date" in text:
+            elif "date" and "today" in text:
                  today = datetime.date.today().strftime("%B %d, %Y")
                  speak(f"Today's date is {today}")
             # elif "temperature" in text or "weather" in text:
-            elif "temperature" in text or "weather" in text:
-                try:
-                    api_key = "5ca60709900a47a3bf15d6fa8262dc98"
+            # elif "temperature" in text or "weather" in text:
+            #     try:
+            #         api_key = "5ca60709900a47a3bf15d6fa8262dc98"
 
-                    city = "Itahari"
+            #         city = "Itahari"
         
-                    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
+            #         url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
 
-                    response = requests.get(url)
-                    data = response.json()
-                    print(data)
+            #         response = requests.get(url)
+            #         data = response.json()
+            #         print(data)
 
-                    temp = data["main"]["temp"]
-                    speak(f"The current temperature in {city} is {temp} degree celsius")
+            #         temp = data["main"]["temp"]
+            #         speak(f"The current temperature in {city} is {temp} degree celsius")
 
-                except Exception as e:
+            #     except Exception as e:
+            #          speak("Sorry, I cannot fetch the temperature right now.")
+            #          print("Error:", e)
+            elif "temperature" in text:
+                 city = "Itahari"
+                 try:
+                     url = f"http://wttr.in/{city}?format=j1"
+                     response = requests.get(url).json()
+                     temp = response["current_condition"][0]["temp_C"]
+                     speak(f"The current temperature in {city} is {temp} degree celsius")
+                 except Exception as e:
                      speak("Sorry, I cannot fetch the temperature right now.")
-                     print("Error:", e)
+                     print(e)
 
 
             # assistant remembering user name

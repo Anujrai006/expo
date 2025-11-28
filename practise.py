@@ -7,6 +7,8 @@ import webbrowser
 import datetime
 import requests
 r = sr.Recognizer()
+pygame.mixer.init()
+
    
 
 def speak(command):
@@ -22,7 +24,7 @@ if __name__ == "__main__":
     name = ""
 
     # openai client (keep OUTSIDE the loop)
-    client=OpenAI(api_key="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")
+    client=OpenAI(api_key="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")
     with sr.Microphone() as source:
       r.adjust_for_ambient_noise(source)
       print("speak jarvis to activate it")
@@ -65,11 +67,26 @@ if __name__ == "__main__":
                 speak("My name is Jarvis, and what's your name?")
 
             # designer?
-            elif "who designed you" or "designed you" or "design you" in text:
+            elif "who designed you" in text or "designed you" in text or "design you" in text:
                 speak("I was designed by the group of class 11 students")
             elif "open google" in text.lower():
                 webbrowser.open("www.google.com")
                 # age?
+            # elif "play song" in text or "play music" in text:
+            #     try:
+            #         song_path ="C:\\Users\\Anuj Rai\\python\\expowork\\expo\\emotional.mp3"    # <-- change path
+            #         pygame.mixer.music.load(song_path)
+            #         pygame.mixer.music.play()
+            #         speak("Playing music now")
+            #     except:
+            #         speak("Sorry, I cannot play the song.")
+            elif "emotional" in text.lower():
+                 webbrowser.open("https://youtu.be/Sc1OI1i-Kgs")
+                 speak("Playing  emotional music on YouTube")
+                 time.sleep(120)
+
+        
+
 
             elif "your age" in text:
                 speak("I don't have a specific age. Just wish me happy birthday anytime!")
@@ -82,7 +99,7 @@ if __name__ == "__main__":
                 now = datetime.datetime.now().strftime("%I:%M %p")
                 speak(f"The time is {now}")
 
-            elif "date" and "today" in text:
+            elif "date" in text and "today" in text:
                  today = datetime.date.today().strftime("%B %d, %Y")
                  speak(f"Today's date is {today}")
             # elif "temperature" in text or "weather" in text:
@@ -127,7 +144,7 @@ if __name__ == "__main__":
                     response = client.chat.completions.create(
                     model="gpt-4o-mini",
                     messages=[
-                        {"role": "system", "content": "You are aa personal assistant named jarvis like a alexa and gemini you are also like a humanoid robot so anser the question in short 1-2 sentences or lines only , store the data you recently said when the user asked the questions based on the recently anser you can reply smoothly sometimes like a mcq wise questions give the very versy short ansers only no need of explaination , and  sometimes according to situation at last for every respond say if there any specific topic"
+                        {"role": "system", "content": "You are aa personal assistant named jarvis like a alexa and gemini you are also like a humanoid robot so anser the question clearly  , store the data you recently said when the user asked the questions based on the recently anser you can reply smoothly sometimes like a mcq wise questions give the very versy short ansers only no need of explaination , and  sometimes according to situation at last for every respond say if there any specific topic"
                         " then i am always here to help you."},
                         {"role": "user", "content": word}
                           ]
@@ -146,7 +163,7 @@ if __name__ == "__main__":
      except sr.RequestError:
             speak("Internet error")
             speak('hello')
-            
+
 
             
 

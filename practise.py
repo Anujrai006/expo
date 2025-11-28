@@ -37,6 +37,7 @@ if __name__ == "__main__":
         
     except TimeoutError:
      print('sorry')
+     speak("sorry try again")
     while True: 
 
      
@@ -54,17 +55,17 @@ if __name__ == "__main__":
 
             # exit
             if text in ["exit", "quit", "bye"]:
-                speak("goodbye")
+                speak("See you again {name} with full energy ")
                 break
                 # break
             
 
             # your name?
             elif "your name" in text:
-                speak("My name is herbie, and what's your name?")
+                speak("My name is Jarvis, and what's your name?")
 
             # designer?
-            elif "who designed you" in text:
+            elif "who designed you" or "designed you" or "design you" in text:
                 speak("I was designed by the group of class 11 students")
             elif "open google" in text.lower():
                 webbrowser.open("www.google.com")
@@ -145,6 +146,8 @@ if __name__ == "__main__":
      except sr.RequestError:
             speak("Internet error")
             speak('hello')
+            
+
             
 
 

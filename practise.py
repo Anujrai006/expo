@@ -2,12 +2,16 @@ import pyttsx3
 import time
 import speech_recognition as sr
 from openai import OpenAI
-import pygame
 import webbrowser
 import datetime
 import requests
-r = sr.Recognizer()
-pygame.mixer.init()
+r = sr.Recognizer
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
+driver=None
 
    
 
@@ -80,10 +84,13 @@ if __name__ == "__main__":
             #         speak("Playing music now")
             #     except:
             #         speak("Sorry, I cannot play the song.")
-            elif "emotional" in text.lower():
-                 webbrowser.open("https://youtu.be/Sc1OI1i-Kgs")
-                 speak("Playing  emotional music on YouTube")
-                 time.sleep(120)
+            # elif "emotional" in text.lower():
+            #      webbrowser.open("https://youtu.be/Sc1OI1i-Kgs")
+            #      speak("Playing  emotional music on YouTube")
+            #      time.sleep(120)
+   
+            
+ 
 
         
 

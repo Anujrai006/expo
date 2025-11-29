@@ -5,15 +5,13 @@ from openai import OpenAI
 import webbrowser
 import datetime
 import requests
-r = sr.Recognizer
+r = sr.Recognizer()
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 driver=None
-
-   
 
 def speak(command):
     engine = pyttsx3.init()
@@ -28,27 +26,25 @@ if __name__ == "__main__":
     name = ""
 
     # openai client (keep OUTSIDE the loop)
-    client=OpenAI(api_key="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")
-    with sr.Microphone() as source:
+client=OpenAI(api_key="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")
+with sr.Microphone() as source:
       r.adjust_for_ambient_noise(source)
       print("speak jarvis to activate it")
       audio=r.listen(source,timeout=5,phrase_time_limit=4)
       com=r.recognize_google(audio)
-    try:
+try:
      if "jarvis" in com.lower():
         print(com)
         speak("yes boss i am active now")
      else:
         exit()
         
-    except TimeoutError:
+except TimeoutError:
      print('sorry')
      speak("sorry try again")
-    while True: 
-
-     
-
-     try:
+    
+while True: 
+    try:
          with sr.Microphone() as source:
             r.adjust_for_ambient_noise(source)
             print("listening...")
@@ -88,9 +84,43 @@ if __name__ == "__main__":
             #      webbrowser.open("https://youtu.be/Sc1OI1i-Kgs")
             #      speak("Playing  emotional music on YouTube")
             #      time.sleep(120)
-   
+
+
+            elif "emotional  song" in text or "emotional" in text:
+                speak("enjoy emotional music...")
+                
+    # Setup Chrome options to disable notifications and autoplay block
+                chrome_options = Options()
+                chrome_options.add_argument("--disable-notifications")
+                chrome_options.add_argument("--start-maximized")
+    
+                driver = webdriver.Chrome(options=chrome_options)
+                driver.get("https://youtu.be/Sc1OI1i-Kgs")  # your song link
+    
+                time.sleep(5)  # wait for page to load
+    
+                try:
+        # Find the play button and click it
+                    play_button = driver.find_element(By.CLASS_NAME, "ytp-large-play-button")
+                    play_button.click()
+                    speak("Music is now playing")
+        
+        # Optional: sleep for a few seconds so the assistant doesn't listen while loading
+                    time.sleep(180)
+        
+                except Exception as e:
+                    print(e)
+                    speak("Could not auto-play the video, please click play manually")
+
             
  
+            elif "stop music" in text or "stop song" in text:
+                if driver:
+                     driver.quit()
+                     driver = None
+                     speak("Music stopped")
+                else:
+                     speak("No music is playing")
 
         
 
@@ -164,10 +194,10 @@ if __name__ == "__main__":
                     print(e)
                     speak("sorry try again")
  
-     except sr.UnknownValueError:
+    except sr.UnknownValueError:
             speak("Sorry, I could not understand")
 
-     except sr.RequestError:
+    except sr.RequestError:
             speak("Internet error")
             speak('hello')
 

@@ -21,9 +21,21 @@ def speak(command):
 if __name__ == "__main__":
     print("initializing")
     speak("initializing")
+def save_name(name):
+    with open("username.txt", "w") as f:
+        f.write(name)
+
+def load_name():
+    try:
+        with open("username.txt", "r") as f:
+            return f.read().strip()
+    except:
+        return ""
+name = load_name()
+
+
 
     # store the name safely
-    name = ""
 
     # openai client (keep OUTSIDE the loop)
 client=OpenAI(api_key="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")
@@ -129,10 +141,10 @@ while True:
                 speak("I don't have a specific age. Just wish me happy birthday anytime!")
 
             # user saying name
-            elif "my name is" in text:
-                name = text.split()[-1]    # extract last word
-                speak(f"Nice to meet you, {name}")
-            elif "time" and "now"  in text:
+            # elif "my name is" in text:
+            #     name = text.split()[-1]    # extract last word
+            #     speak(f"Nice to meet you, {name}")
+            elif "time" in text and "now"  in text:
                 now = datetime.datetime.now().strftime("%I:%M %p")
                 speak(f"The time is {now}")
 
@@ -171,11 +183,22 @@ while True:
 
 
             # assistant remembering user name
+            # elif "do you know my name" in text:
+            #     if name:
+            #         speak(f"Yes, your name is {name}")
+            #     else:
+            #         speak("You have not told me your name yet")
+            elif "my name is" in text:
+              name = text.split()[-1]
+              save_name(name)   # <-- Save it permanently
+              speak(f"Nice to meet you, {name}")
             elif "do you know my name" in text:
                 if name:
-                    speak(f"Yes, your name is {name}")
+                  speak(f"Yes, your name is {name}")
                 else:
-                    speak("You have not told me your name yet")
+                   speak("You have not told me your name yet")
+
+
             else:
                 try:
                     response = client.chat.completions.create(

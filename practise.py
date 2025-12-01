@@ -32,10 +32,17 @@ def load_name():
     except:
         return ""
 name = load_name()
-
-
-
-    # store the name safely
+def save_city(city):
+    with open("cityname.txt", "w") as c:
+                       c.write(city)
+def load_city():
+        try:
+            with open("cityname.txt", "r") as c:
+                return c.read().strip()
+        except:
+            return ""
+city = load_name()
+# store the name safely
 
     # openai client (keep OUTSIDE the loop)
 client=OpenAI(api_key="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")
@@ -139,6 +146,12 @@ while True:
 
             elif "your age" in text:
                 speak("I don't have a specific age. Just wish me happy birthday anytime!")
+            elif "city" in text:
+                 city=text.split()[-1]
+                 save_city(city)
+                 speak(f"woow {city} is wonderful place ")
+                
+
 
             # user saying name
             # elif "my name is" in text:
@@ -171,7 +184,7 @@ while True:
             #          speak("Sorry, I cannot fetch the temperature right now.")
             #          print("Error:", e)
             elif "temperature" in text:
-                 city = "Itahari"
+                 
                  try:
                      url = f"http://wttr.in/{city}?format=j1"
                      response = requests.get(url).json()

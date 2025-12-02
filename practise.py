@@ -87,7 +87,7 @@ while True:
 
             # designer?
             elif "who designed you" in text or "designed you" in text or "design you" in text:
-                speak("I was designed by the group of class 11 students")
+                speak("I was designed by the group of 7 members of class 11 students")
             elif "open google" in text.lower():
                 webbrowser.open("www.google.com")
                 # age?

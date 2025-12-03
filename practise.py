@@ -90,6 +90,10 @@ while True:
                 speak("I was designed by the group of 7 members of class 11 students")
             elif "open google" in text.lower():
                 webbrowser.open("www.google.com")
+                speak("opening google")
+            elif "open youtube" in text.lower():
+                webbrowser.open("www.youtube.com")
+                speak("opening youtube")
                 # age?
             # elif "play song" in text or "play music" in text:
             #     try:

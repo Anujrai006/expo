@@ -207,7 +207,7 @@ while True:
               speak(f"Nice to meet you, {name}")
             elif "do you know my name" in text:
                 if name:
-                  speak(f"Yes, your name is {name}")
+                  speak(f"Yes, your name is {name} do you need some extra help")
                 else:
                    speak("You have not told me your name yet")
 
@@ -235,7 +235,7 @@ while True:
 
     except sr.RequestError:
             speak("Internet error")
-            speak('hello')
+        
 
 
             

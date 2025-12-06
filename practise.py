@@ -41,26 +41,22 @@ def load_city():
                 return c.read().strip()
         except:
             return ""
-city = load_name()
+city = load_city()
 # store the name safely
 
     # openai client (keep OUTSIDE the loop)
 client=OpenAI(api_key="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")
 with sr.Microphone() as source:
-      r.adjust_for_ambient_noise(source)
-      print("speak jarvis to activate it")
-      audio=r.listen(source,timeout=5,phrase_time_limit=4)
-      com=r.recognize_google(audio)
-try:
-     if "jarvis" in com.lower():
-        print(com)
-        speak("yes boss i am active now")
-     else:
-        exit()
-        
-except TimeoutError:
-     print('sorry')
-     speak("sorry try again")
+    r.adjust_for_ambient_noise(source)
+    try:
+        audio = r.listen(source, timeout=5, phrase_time_limit=4)
+        com = r.recognize_google(audio)
+        if "jarvis" in com.lower():
+            speak("yes boss I am active now")
+        else:
+            exit()
+    except:
+        speak("sorry try again")
     
 while True: 
     try:
@@ -144,23 +140,12 @@ while True:
                      speak("Music stopped")
                 else:
                      speak("No music is playing")
-
-        
-
-
             elif "your age" in text:
                 speak("I don't have a specific age. Just wish me happy birthday anytime!")
             elif "city" in text:
                  city=text.split()[-1]
                  save_city(city)
                  speak(f"woow {city} is wonderful place ")
-                
-
-
-            # user saying name
-            # elif "my name is" in text:
-            #     name = text.split()[-1]    # extract last word
-            #     speak(f"Nice to meet you, {name}")
             elif "time" in text and "now"  in text:
                 now = datetime.datetime.now().strftime("%I:%M %p")
                 speak(f"The time is {now}")
@@ -168,25 +153,6 @@ while True:
             elif "date" in text and "today" in text:
                  today = datetime.date.today().strftime("%B %d, %Y")
                  speak(f"Today's date is {today}")
-            # elif "temperature" in text or "weather" in text:
-            # elif "temperature" in text or "weather" in text:
-            #     try:
-            #         api_key = "5ca60709900a47a3bf15d6fa8262dc98"
-
-            #         city = "Itahari"
-        
-            #         url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
-
-            #         response = requests.get(url)
-            #         data = response.json()
-            #         print(data)
-
-            #         temp = data["main"]["temp"]
-            #         speak(f"The current temperature in {city} is {temp} degree celsius")
-
-            #     except Exception as e:
-            #          speak("Sorry, I cannot fetch the temperature right now.")
-            #          print("Error:", e)
             elif "temperature" in text:
                  
                  try:
@@ -197,14 +163,6 @@ while True:
                  except Exception as e:
                      speak("Sorry, I cannot fetch the temperature right now.")
                      print(e)
-
-
-            # assistant remembering user name
-            # elif "do you know my name" in text:
-            #     if name:
-            #         speak(f"Yes, your name is {name}")
-            #     else:
-            #         speak("You have not told me your name yet")
             elif "my name is" in text:
               name = text.split()[-1]
               save_name(name)   # <-- Save it permanently

@@ -21,6 +21,7 @@ def speak(command):
 if __name__ == "__main__":
     print("initializing")
     speak("initializing")
+    print("speak jarvis to wake up")
 def save_name(name):
     with open("username.txt", "w") as f:
         f.write(name)
@@ -45,7 +46,7 @@ city = load_city()
 # store the name safely
 
     # openai client (keep OUTSIDE the loop)
-client=OpenAI(api_key="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")
+client=OpenAI(api_key="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")
 with sr.Microphone() as source:
     r.adjust_for_ambient_noise(source)
     try:
@@ -142,7 +143,7 @@ while True:
                      speak("No music is playing")
             elif "your age" in text:
                 speak("I don't have a specific age. Just wish me happy birthday anytime!")
-            elif "city" in text:
+            elif "i am from" in text:
                  city=text.split()[-1]
                  save_city(city)
                  speak(f"woow {city} is wonderful place ")

@@ -71,6 +71,12 @@ while True:
             except sr.WaitTimeoutError:
                  print("No speech detected ,trying again...")
                  continue
+            except sr.UnknownValueError:
+                 print("Couldn't understand, try again....")
+                 continue
+            except sr.RequestError:
+                 print("Internet problem, try again...")
+                 continue
             
         
 

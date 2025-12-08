@@ -64,10 +64,15 @@ while True:
          with sr.Microphone() as source:
             r.adjust_for_ambient_noise(source)
             print("listening...")
-            audio = r.listen(source, timeout=4, phrase_time_limit=7)
+            try:
+                audio = r.listen(source, timeout=4, phrase_time_limit=7)
+                word = r.recognize_google(audio)
+                print("You said:", word)
+            except sr.WaitTimeoutError:
+                 print("No speech detected ,trying again...")
+                 continue
             
-            word = r.recognize_google(audio)
-            print("You said:", word)
+        
 
             text = word.lower()
 
@@ -92,20 +97,6 @@ while True:
                 webbrowser.open("www.youtube.com")
                 speak("opening youtube")
                 # age?
-            # elif "play song" in text or "play music" in text:
-            #     try:
-            #         song_path ="C:\\Users\\Anuj Rai\\python\\expowork\\expo\\emotional.mp3"    # <-- change path
-            #         pygame.mixer.music.load(song_path)
-            #         pygame.mixer.music.play()
-            #         speak("Playing music now")
-            #     except:
-            #         speak("Sorry, I cannot play the song.")
-            # elif "emotional" in text.lower():
-            #      webbrowser.open("https://youtu.be/Sc1OI1i-Kgs")
-            #      speak("Playing  emotional music on YouTube")
-            #      time.sleep(120)
-
-
             elif "emotional  song" in text or "emotional" in text:
                 speak("enjoy emotional music...")
                 
@@ -189,9 +180,9 @@ while True:
                     answer = response.choices[0].message.content
                     speak(answer)
                     print(answer)
-                except UnboundLocalError as e:
-                    print(e)
-                    speak("sorry try again")
+                except Exception as e:
+                     print(e)
+                     speak("try again")
  
     except sr.UnknownValueError:
             speak("Sorry, I could not understand")

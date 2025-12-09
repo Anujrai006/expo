@@ -12,11 +12,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 driver=None
+# engine=pyttsx3.init()
+# voices=engine.getProperty('voices')
+# engine.setProperty('voice',voices[1].id)
+# engine.setProperty('rate',175)
 
 def speak(command):
     engine = pyttsx3.init()
     engine.say(command)
     engine.runAndWait()
+    
 
 if __name__ == "__main__":
     print("initializing")

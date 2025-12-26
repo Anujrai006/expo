@@ -51,9 +51,12 @@ city = load_city()
 # store the name safely
 
     # openai client (keep OUTSIDE the loop)
-client=OpenAI(api_key="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")
-with sr.Microphone() as source:
-    r.adjust_for_ambient_noise(source)
+    client = OpenAI(api_key="")
+    with sr.Microphone() as source:
+      r.adjust_for_ambient_noise(source)
+      print("speak jarvis to activate it")
+      audio=r.listen(source,timeout=5,phrase_time_limit=3)
+      com=r.recognize_google(audio)
     try:
         audio = r.listen(source, timeout=5, phrase_time_limit=4)
         com = r.recognize_google(audio)

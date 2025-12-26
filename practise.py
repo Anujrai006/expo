@@ -58,7 +58,9 @@ with sr.Microphone() as source:
         audio = r.listen(source, timeout=5, phrase_time_limit=4)
         com = r.recognize_google(audio)
         if "jarvis" in com.lower():
-            speak("yes boss I am active now")
+            # speak("yes boss I am active now")
+            speak("jarvis activated")
+            speak(f"welcome back {name}")
         else:
             exit()
     except:

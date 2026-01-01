@@ -26,7 +26,6 @@ def speak(command):
 if __name__ == "__main__":
     print("initializing")
     speak("initializing")
-    print("speak jarvis to wake up")
 def save_name(name):
     with open("username.txt", "w") as f:
         f.write(name)
@@ -49,29 +48,31 @@ def load_city():
             return ""
 city = load_city()
 # store the name safely
+ # openai client (keep OUTSIDE the loop)
 
-    # openai client (keep OUTSIDE the loop)
-    client = OpenAI(api_key="")
-    with sr.Microphone() as source:
-      r.adjust_for_ambient_noise(source)
-      print("speak jarvis to activate it")
-      audio=r.listen(source,timeout=5,phrase_time_limit=3)
-      com=r.recognize_google(audio)
+while True:
     try:
-        audio = r.listen(source, timeout=5, phrase_time_limit=4)
-        com = r.recognize_google(audio)
-        if "jarvis" in com.lower():
-            # speak("yes boss I am active now")
-            speak("jarvis activated")
-            speak(f"welcome back {name}")
-        else:
-            exit()
+        with sr.Microphone() as source:
+            r.adjust_for_ambient_noise(source)
+            print("speak jarvis to activate it")
+            audio=r.listen(source,timeout=5,phrase_time_limit=3)
+            com=r.recognize_google(audio)
+            if "jarvis" in com.lower():
+                speak("jarvis activated")
+                if name:
+                    speak(f"welcome back {name}. How can I assist you today?")
+                else:
+                    speak("welcome back. How can I assist you today?")
+                break
+            else:
+                speak("please say jarvis to activate")
     except:
         speak("sorry try again")
+
+client = OpenAI(api_key="")    
+while True:
     
-while True: 
-    try:
-         with sr.Microphone() as source:
+        with sr.Microphone() as source:
             r.adjust_for_ambient_noise(source)
             print("listening...")
             try:
@@ -79,22 +80,24 @@ while True:
                 word = r.recognize_google(audio)
                 print("You said:", word)
             except sr.WaitTimeoutError:
-                 print("No speech detected ,trying again...")
-                 continue
+                speak("No speech detected, trying again")
+                continue
             except sr.UnknownValueError:
-                 print("Couldn't understand, try again....")
-                 continue
+                speak("Couldn't understand, try again")
+                continue
             except sr.RequestError:
-                 print("Internet problem, try again...")
-                 continue
+                speak("Internet problem, try again")
+                continue
             
-        
 
             text = word.lower()
 
             # exit
             if text in ["exit", "quit", "bye"]:
-                speak("See you again {name} with full energy ")
+                if name:
+                    speak(f"See you again {name} with full energy")
+                else:
+                    speak("See you again with full energy")
                 break
                 # break
             
@@ -167,7 +170,7 @@ while True:
                      url = f"http://wttr.in/{city}?format=j1"
                      response = requests.get(url).json()
                      temp = response["current_condition"][0]["temp_C"]
-                     speak(f"The current temperature in {city} is {temp} degree celsius")
+                     speak(f"The current temperature in {city} is {temp} degrees Celsius")
                  except Exception as e:
                      speak("Sorry, I cannot fetch the temperature right now.")
                      print(e)
@@ -187,8 +190,7 @@ while True:
                     response = client.chat.completions.create(
                     model="gpt-4o-mini",
                     messages=[
-                        {"role": "system", "content": "You are aa personal assistant named jarvis like a alexa and gemini you are also like a humanoid robot so anser the question clearly  , store the data you recently said when the user asked the questions based on the recently anser you can reply smoothly sometimes like a mcq wise questions give the very versy short ansers only no need of explaination , and  sometimes according to situation at last for every respond say if there any specific topic"
-                        " then i am always here to help you."},
+                        {"role": "system", "content": "You are a personal assistant named Jarvis like Alexa and Gemini. You are also like a humanoid robot, so answer the question clearly. Store the data you recently said when the user asked the questions based on the recently answered you can reply smoothly. Sometimes like MCQ-wise questions give very short answers only, no need of explanation, and sometimes according to situation. At last for every response say if there is any specific topic, then I am always here to help you."},
                         {"role": "user", "content": word}
                           ]
                           )
@@ -200,11 +202,7 @@ while True:
                      print(e)
                      speak("try again")
  
-    except sr.UnknownValueError:
-            speak("Sorry, I could not understand")
 
-    except sr.RequestError:
-            speak("Internet error")
         
 
 

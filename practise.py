@@ -69,7 +69,7 @@ while True:
     except:
         speak("sorry try again")
 
-client = OpenAI(api_key="")    
+client = OpenAI(api_key="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")    
 while True:
     
         with sr.Microphone() as source:
